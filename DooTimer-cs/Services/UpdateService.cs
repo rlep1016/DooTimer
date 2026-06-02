@@ -27,9 +27,10 @@ public class UpdateInfo
     public UpdateState State { get; set; } = UpdateState.Idle;
     public string? LatestVersion { get; set; }
     public string? CurrentVersion { get; set; }
-    public string? Message { get; set; }  // 提示文字
+    public string? Message { get; set; }
     public string? InstallerPath { get; set; }
-    public Action? InstallAction { get; set; }  // 安装回调
+    public Action? InstallAction { get; set; }
+    public int DownloadProgress { get; set; }  // 0-100
 }
 
 /// <summary>
@@ -168,9 +169,23 @@ public class UpdateService
                 return;
             }
 
+            var totalBytes = response.Content.Headers.ContentLength ?? 0;
             await using var stream = await response.Content.ReadAsStreamAsync();
             await using var fileStream = File.Create(installerPath);
-            await stream.CopyToAsync(fileStream);
+
+            var buffer = new byte[8192];
+            long downloaded = 0;
+            int read;
+            while ((read = await stream.ReadAsync(buffer)) > 0)
+            {
+                await fileStream.WriteAsync(buffer.AsMemory(0, read));
+                downloaded += read;
+                if (totalBytes > 0)
+                {
+                    Info.DownloadProgress = (int)(downloaded * 100 / totalBytes);
+                    StateChanged?.Invoke();
+                }
+            }
 
             Info.InstallerPath = installerPath;
             Info.InstallAction = () => ExecuteInstall(installerPath);

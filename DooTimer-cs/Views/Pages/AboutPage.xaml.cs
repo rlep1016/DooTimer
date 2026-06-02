@@ -17,6 +17,7 @@ public partial class AboutPage : System.Windows.Controls.UserControl
     private Border? _updateBorder;
     private TextBlock? _updateStatusText;
     private System.Windows.Controls.Button? _updateButton;
+    private System.Windows.Controls.ProgressBar? _updateProgress;
 
     // 路径将在初始化时传入
     private readonly string _projectDir;
@@ -94,6 +95,18 @@ public partial class AboutPage : System.Windows.Controls.UserControl
         _updateButton.Click += UpdateButton_Click;
         stack.Children.Add(_updateButton);
 
+        _updateProgress = new System.Windows.Controls.ProgressBar
+        {
+            Height = 6,
+            Margin = new Thickness(0, 0, 0, 18),
+            Visibility = Visibility.Collapsed,
+            Minimum = 0,
+            Maximum = 100,
+            Foreground = AppColors.BlueBrush,
+            Background = AppColors.SurfaceAltBrush
+        };
+        stack.Children.Add(_updateProgress);
+
         _updateBorder.Child = stack;
 
         // Content 是 ScrollViewer，需要取出里面的 Grid
@@ -116,6 +129,10 @@ public partial class AboutPage : System.Windows.Controls.UserControl
         if (_updateStatusText == null || _updateButton == null) return;
 
         var info = _updateService.Info;
+
+        // 非下载状态时隐藏进度条
+        if (_updateProgress != null && info.State != UpdateState.Downloading)
+            _updateProgress.Visibility = Visibility.Collapsed;
 
         switch (info.State)
         {
@@ -151,8 +168,13 @@ public partial class AboutPage : System.Windows.Controls.UserControl
             case UpdateState.Downloading:
                 _updateStatusText.Text = info.Message;
                 _updateStatusText.Foreground = AppColors.BlueBrush;
-                _updateButton.Content = "下载中...";
+                _updateButton.Content = $"下载中 {info.DownloadProgress}%";
                 _updateButton.IsEnabled = false;
+                if (_updateProgress != null)
+                {
+                    _updateProgress.Visibility = Visibility.Visible;
+                    _updateProgress.Value = info.DownloadProgress;
+                }
                 break;
 
             case UpdateState.Downloaded:
