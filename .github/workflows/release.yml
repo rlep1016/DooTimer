@@ -23,7 +23,7 @@ jobs:
       working-directory: DooTimer-cs
 
     - name: Publish
-      run: dotnet publish -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true
+      run: dotnet publish DooTimer.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
       working-directory: DooTimer-cs
 
     - name: Upload Release Asset
