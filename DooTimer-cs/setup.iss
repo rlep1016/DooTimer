@@ -24,7 +24,7 @@ Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
 ; 使用应用图标
-SetupIconFile=..\DooTimer-cs\DooTimer.ico
+SetupIconFile=DooTimer.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
 PrivilegesRequired=admin
@@ -37,8 +37,8 @@ Name: "chinesesimplified"; MessagesFile: "compiler:Languages\ChineseSimplified.i
 Name: "desktopicon"; Description: "创建桌面快捷方式"; GroupDescription: "附加图标:"; Flags: unchecked
 
 [Files]
-Source: "..\DooTimer-cs\publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\DooTimer-cs\DooTimer.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "DooTimer.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; IconFilename: "{app}\DooTimer.ico"
