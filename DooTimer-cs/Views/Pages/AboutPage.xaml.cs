@@ -104,9 +104,9 @@ public partial class AboutPage : System.Windows.Controls.UserControl
             foreach (var child in mainGrid.Children.OfType<Border>())
             {
                 var row = System.Windows.Controls.Grid.GetRow(child);
-                if (row >= 2) System.Windows.Controls.Grid.SetRow(child, row + 1);
+                if (row >= 1) System.Windows.Controls.Grid.SetRow(child, row + 1);
             }
-            System.Windows.Controls.Grid.SetRow(_updateBorder, 2);
+            System.Windows.Controls.Grid.SetRow(_updateBorder, 1);
             mainGrid.Children.Add(_updateBorder);
         }
     }
