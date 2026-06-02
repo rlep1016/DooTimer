@@ -39,6 +39,7 @@ Name: "desktopicon"; Description: "创建桌面快捷方式"; GroupDescription: 
 
 [Files]
 Source: "publish\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "publish\*.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "DooTimer.ico"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
