@@ -27,8 +27,9 @@ WizardStyle=modern
 SetupIconFile=DooTimer.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UninstallDisplayName={#MyAppName}
-PrivilegesRequired=admin
+PrivilegesRequired=none
 ArchitecturesInstallIn64BitMode=x64compatible
+DisableDirPage=no
 
 [Languages]
 Name: "chinesesimplified"; MessagesFile: "ChineseSimplified.isl"
