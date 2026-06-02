@@ -25,12 +25,14 @@ jobs:
       working-directory: DooTimer-cs
 
     - name: Install Inno Setup
-      run: choco install innosetup -y --no-progress
+      run: |
+        curl -L -o innosetup.exe "https://files.jrsoftware.org/is/6/innosetup-6.4.1.exe"
+        .\innosetup.exe /VERYSILENT /SUPPRESSMSGBOXES /NORESTART /DIR="C:\inno"
+      shell: powershell
 
     - name: Build Installer
       run: |
-        $iscc = "C:\Program Files (x86)\Inno Setup 6\ISCC.exe"
-        if (-not (Test-Path $iscc)) { $iscc = "C:\Program Files\Inno Setup 6\ISCC.exe" }
+        $iscc = "C:\inno\ISCC.exe"
         & $iscc setup.iss
       working-directory: DooTimer-cs
 
