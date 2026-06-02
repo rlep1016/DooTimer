@@ -48,7 +48,8 @@ DooTimer-cs/                         # C# 项目根目录
 │   ├── Notifier.cs                  # 提醒通知（优先托盘气泡，回退 MessageBox）
 │   ├── StartupService.cs            # 开机启动管理（创建/删除启动文件夹快捷方式）
 │   ├── SingleInstanceService.cs     # 单实例保护（Mutex，防止重复启动）
-│   └── TrayService.cs               # 系统托盘（右键菜单、气泡通知、双击打开面板）
+│   ├── TrayService.cs               # 系统托盘（右键菜单、气泡通知、双击打开面板）
+│   └── UpdateService.cs             # 自动更新（检查 GitHub Release → 下载 → 安装）
 │
 ├── Views/                           # 界面层（WPF 窗口和页面）
 │   ├── MainWindow.xaml/.cs          # 主窗口（侧边栏导航 + 内容区 + 任务栏覆盖标签）
@@ -65,6 +66,23 @@ DooTimer-cs/                         # C# 项目根目录
 │
 └── Converters/                      # WPF 值转换器 + 配色常量 + 主题切换
     └── Converters.cs                # 数据绑定转换 + 亮/暗双套配色 + ApplyTheme()
+
+根目录关键文件：
+├── README.md                        # 项目说明（GitHub 首页展示）
+├── LICENSE                          # MIT 开源许可证
+├── build.ps1                        # 一键编译脚本
+├── CLAUDE.md                        # 项目技术文档（本文件）
+├── setup.iss                        # Inno Setup 安装包脚本
+├── ChineseSimplified.isl            # 安装包简体中文语言文件
+└── .github/workflows/               # GitHub Actions CI/CD
+    ├── build.yml                    # 推送/PR 时自动编译 + 运行测试
+    └── release.yml                  # 推送 tag 时自动打包 Release（当前需手动）
+
+测试项目（DooTimer.Tests/）：
+├── DooTimer.Tests.csproj            # xUnit 测试项目，引用主项目
+├── FormatHelperTests.cs             # 格式化工具测试（13 条）
+├── ConfigServiceTests.cs            # 配置加载/校验测试（8 条）
+└── UsageStorageTests.cs             # 数据读写/会话存储测试（10 条）
 ```
 
 ## 核心架构
@@ -277,3 +295,77 @@ dotnet test DooTimer-cs/DooTimer.Tests/DooTimer.Tests.csproj
 | `release.yml` | 推送 `v*` tag | 编译 + 打包单文件 exe + 发布 Release |
 
 **注意**：主项目 `DooTimer.csproj` 中需要排除测试目录（`<Compile Remove="DooTimer.Tests\**" />`），否则 WPF 临时编译机制会把测试文件当成主项目代码导致编译失败。
+
+## 自动更新
+
+### 流程
+
+```
+启动 DooTimer
+  → 延迟 3 秒，后台调用 GitHub API 检查最新 Release
+    → 版本相同？啥也不干
+    → 网络错误？静默跳过
+    → 发现新版本？
+      → 侧边栏「关于」按钮右侧出现红点 🔴
+      → 用户点「关于」→ 看到软件更新区域
+      → 点「下载更新」→ 后台下载安装包到 %TEMP%\DooTimer\update\
+      → 下载完 → 按钮变绿色「安装更新」
+      → 点「安装更新」→ UAC 提权 → 运行安装包 → 退出 DooTimer
+      → 装完 → 自动打开新版
+```
+
+### 状态机
+
+```
+Idle → Checking → [UpToDate | Available | Error]
+Available → Downloading → Downloaded → (用户点安装) → 退出
+Downloading → [Downloaded | Error]
+Error → (重试) → Checking
+```
+
+### 关键实现
+
+| 文件 | 作用 |
+|------|------|
+| `UpdateService.cs` | 调用 GitHub API、下载、状态管理 |
+| `App.xaml.cs` | 启动时 `Task.Run` 调用 `CheckAsync()`，更新完成则清理旧包 |
+| `MainWindow.xaml.cs` | 订阅 `StateChanged`，给关于按钮加红点 |
+| `AboutPage.xaml.cs` | 动态创建更新区域 UI，按钮驱动状态切换 |
+
+### 注意事项
+
+- GitHub API 需要 User-Agent 头，否则返回 403
+- 版本比较：用 `AssemblyInformationalVersion`，支持 `x.y.z` 格式
+- 下载前检查本地缓存，已存在则跳过下载直接到 Downloaded 状态
+- 升级后启动时检测到 `UpToDate` 状态会自动清理 `%TEMP%\DooTimer\update\` 目录
+
+## 安装包（Inno Setup）
+
+### 使用
+
+```powershell
+# 1. 先发布 exe
+dotnet publish DooTimer-cs/DooTimer.csproj -c Release -r win-x64 -p:PublishSingleFile=true -p:SelfContained=true -o publish
+
+# 2. 打包安装程序
+" C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup.iss
+# 输出: installer\DooTimer-Setup-vX.X.X.exe（约 46 MB，LZMA 压缩）
+```
+
+### 安装包特性
+
+- 可选安装路径（首次安装），后续更新自动沿用
+- 桌面快捷方式（可选）
+- 开始菜单 + 卸载入口
+- 控制面板可卸载
+- 简体中文安装向导
+- 不需要管理员权限（装到 Program Files 时才提权）
+
+### 语言文件
+
+`ChineseSimplified.isl` 是精简手写版，覆盖了主要按钮和提示。未覆盖的消息回退到英文。
+
+### 已知问题
+
+- **CI 自动打包 Inno Setup 一直失败**（远程调试困难，本地打包正常）。当前做法：手动本地打包 + `gh release upload` 上传
+- 安装包约 46 MB（LZMA 压缩），原始 exe 约 153 MB
