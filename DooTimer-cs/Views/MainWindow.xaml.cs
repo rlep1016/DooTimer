@@ -128,6 +128,11 @@ public partial class MainWindow : Window
             SizeToContent = SizeToContent.Manual,
         };
         _overlay.Show();
+        // 设置 WS_EX_TOOLWINDOW 样式，让覆盖窗口不出现在 Alt+Tab 切换列表中
+        var overlayHandle = new WindowInteropHelper(_overlay).Handle;
+        var exStyle = NativeMethods.GetWindowLongPtr(overlayHandle, NativeMethods.GWL_EXSTYLE);
+        NativeMethods.SetWindowLongPtr(overlayHandle, NativeMethods.GWL_EXSTYLE,
+            new IntPtr(exStyle.ToInt64() | NativeMethods.WS_EX_TOOLWINDOW));
         _overlayTextTop.Text = "今日抖音";
         _overlayTextBottom.Text = "";
         PositionOverlay();
