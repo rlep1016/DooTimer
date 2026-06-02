@@ -20,7 +20,7 @@
 
 ### 方式一：直接运行（推荐）
 
-从 [Releases](https://github.com/你的用户名/DooTimer/releases) 页面下载最新的 `DooTimer.exe`，放到任意文件夹双击运行即可。
+从 [Releases](https://github.com/rlep1016/DooTimer/releases) 页面下载最新的 `DooTimer.exe`，放到任意文件夹双击运行即可。
 
 这是一个单文件程序，不需要安装任何东西（.NET Runtime 已打包在内）。
 
@@ -28,7 +28,7 @@
 
 ```powershell
 # 克隆项目
-git clone https://github.com/你的用户名/DooTimer.git
+git clone https://github.com/rlep1016/DooTimer.git
 cd DooTimer
 
 # 编译
