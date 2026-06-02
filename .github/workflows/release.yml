@@ -19,16 +19,16 @@ jobs:
         dotnet-version: 8.0.x
 
     - name: Restore dependencies
-      run: dotnet restore
+      run: dotnet restore DooTimer.csproj
       working-directory: DooTimer-cs
 
     - name: Publish
-      run: dotnet publish DooTimer.csproj -c Release -r win-x64 --self-contained -p:PublishSingleFile=true
+      run: dotnet publish DooTimer.csproj -c Release -r win-x64 -p:PublishSingleFile=true -p:SelfContained=true -o publish
       working-directory: DooTimer-cs
 
     - name: Upload Release Asset
       uses: softprops/action-gh-release@v2
       with:
-        files: DooTimer-cs/bin/Release/net8.0-windows/win-x64/publish/DooTimer.exe
+        files: DooTimer-cs/publish/DooTimer.exe
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
