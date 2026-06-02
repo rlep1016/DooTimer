@@ -1,0 +1,116 @@
+<UserControl x:Class="DooTimer.Views.Pages.AboutPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:DooTimer.Converters">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 产品信息 -->
+            <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}"
+                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    Margin="0,0,0,14" Padding="22">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Width="58" Height="58" CornerRadius="24"
+                            Background="{DynamicResource BlueBrush}" Margin="0,0,0,0">
+                        <TextBlock Text="D" FontSize="28" FontWeight="Bold" Foreground="White"
+                                   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" Margin="16,0,0,0" VerticalAlignment="Center">
+                        <TextBlock Text="DooTimer" FontSize="26" FontWeight="Bold"
+                                   Foreground="{DynamicResource TextBrush}"/>
+                        <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource MutedBrush}">
+                            <Run x:Name="VersionText" Text="版本 0.4.0"/>
+                            <Run Text=" · Windows 前台抖音时间监控工具"/>
+                        </TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 文件操作 -->
+            <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}"
+                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    Margin="0,0,0,14" Padding="22">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="文件与排错" FontSize="18" FontWeight="Bold"
+                               Foreground="{DynamicResource TextBrush}" Margin="0,20,0,4"/>
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="2"
+                               Text="这些按钮会打开本机文件或文件夹，方便你查看配置、使用数据和运行日志。"
+                               Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,14"/>
+
+                    <Button Grid.Row="2" Grid.Column="0" Content="打开项目文件夹" Height="40"
+                            Style="{StaticResource AboutButton}" Click="OpenProjectDir_Click"/>
+                    <Button Grid.Row="2" Grid.Column="1" Content="打开配置文件" Height="40"
+                            Style="{StaticResource AboutButton}" Click="OpenConfig_Click"/>
+
+                    <Button Grid.Row="3" Grid.Column="0" Content="打开数据文件" Height="40"
+                            Style="{StaticResource AboutButton}" Click="OpenData_Click"/>
+                    <Button Grid.Row="3" Grid.Column="1" Content="打开日志文件" Height="40"
+                            Style="{StaticResource AboutButton}" Click="OpenLog_Click"/>
+
+                    <Button Grid.Row="4" Grid.Column="0" Content="打开数据文件夹" Height="40"
+                            Style="{StaticResource AboutButton}" Click="OpenDataDir_Click"/>
+                    <Button Grid.Row="4" Grid.Column="1" Content="打开日志文件夹" Height="40"
+                            Style="{StaticResource AboutButton}" Click="OpenLogDir_Click"/>
+
+                    <Button Grid.Row="5" Grid.Column="0" Content="导出 CSV" Height="40"
+                            Style="{StaticResource AboutButton}" Click="ExportCsv_Click"/>
+                    <Button Grid.Row="5" Grid.Column="1" Content="打开导出文件夹" Height="40"
+                            Style="{StaticResource AboutButton}" Click="OpenExportDir_Click"/>
+                </Grid>
+            </Border>
+
+            <!-- 文件状态 -->
+            <Border Grid.Row="2" Background="{DynamicResource SurfaceBrush}"
+                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    Margin="0,0,0,14" Padding="22">
+                <StackPanel>
+                    <TextBlock Text="状态与排错" FontSize="18" FontWeight="Bold"
+                               Foreground="{DynamicResource TextBrush}" Margin="0,20,0,4"/>
+                    <TextBlock Text="关键文件状态会在打开本页时刷新。"
+                               Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,12"/>
+                    <StackPanel x:Name="HealthList" Margin="0,0,0,18"/>
+                </StackPanel>
+            </Border>
+
+            <!-- 运行方式说明 -->
+            <Border Grid.Row="3" Background="{DynamicResource SurfaceBrush}"
+                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    Margin="0,0,0,14" Padding="22">
+                <StackPanel>
+                    <TextBlock Text="运行方式" FontSize="18" FontWeight="Bold"
+                               Foreground="{DynamicResource TextBrush}" Margin="0,20,0,4"/>
+                    <TextBlock TextWrapping="Wrap"
+                               Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,20">
+                        <TextBlock.Text>关闭主窗口只是隐藏界面，监控会继续在托盘运行；需要彻底退出时，请用左侧的“退出 DooTimer”或托盘菜单。</TextBlock.Text>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

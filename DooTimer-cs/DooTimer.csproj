@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon>DooTimer.ico</ApplicationIcon>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <!-- 排除测试项目目录，避免 WPF 临时编译时误包含测试代码 -->
+  <ItemGroup>
+    <Compile Remove="DooTimer.Tests\**" />
+    <None Remove="DooTimer.Tests\**" />
+    <Content Remove="DooTimer.Tests\**" />
+    <EmbeddedResource Remove="DooTimer.Tests\**" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,189 @@
+﻿<UserControl x:Class="DooTimer.Views.Pages.OverviewPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:DooTimer.Converters">
+    <UserControl.Resources>
+        <converters:SecondsToTextConverter x:Key="SecondsToText"/>
+        <converters:SecondsToCompactConverter x:Key="SecondsToCompact"/>
+        <converters:PercentToTextConverter x:Key="PercentToText"/>
+        <converters:PercentToProgressColorConverter x:Key="PercentToColor"/>
+        <converters:IsDouyinToColorConverter x:Key="IsDouyinToColor"/>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Hero: Full-width status card -->
+        <Border Grid.Row="0" Grid.ColumnSpan="2"
+                Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                Margin="0,0,0,14" Padding="24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Row 0: Status pill + source -->
+                <Grid Grid.Row="0" Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Status pill -->
+                    <Border Grid.Column="0" CornerRadius="24" Padding="14,8" MinWidth="110"
+                            Background="{DynamicResource GreenSoftBrush}">
+                        <TextBlock x:Name="StatusPill" FontWeight="Bold" FontSize="14">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Text" Value="未检测到抖音"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource GreenBrush}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsDouyin}" Value="True">
+                                            <Setter Property="Text" Value="正在刷抖音"/>
+                                            <Setter Property="Foreground" Value="{DynamicResource RedBrush}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Border>
+
+                    <!-- Source -->
+                    <TextBlock Grid.Column="1" Text="{Binding Source, StringFormat='来源：{0}'}"
+                               Foreground="{DynamicResource MutedBrush}" FontSize="14"
+                               VerticalAlignment="Center" Margin="16,0,0,0"/>
+                </Grid>
+
+                <!-- Row 1: Big status message -->
+                <TextBlock Grid.Row="1" FontSize="28" FontWeight="Bold" Margin="0,12,0,0"
+                           Foreground="{DynamicResource TextBrush}">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Text" Value="现在没有在刷抖音"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsDouyin}" Value="True">
+                                    <Setter Property="Text" Value="正在刷抖音"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+
+                <!-- Row 2: Process + Window details -->
+                <Border Grid.Row="2" Background="{DynamicResource SurfaceAltBrush}"
+                        CornerRadius="16" Margin="0,16,0,20" Padding="18">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="进程" Foreground="{DynamicResource MutedBrush}"
+                                   Margin="0,12,18,10"/>
+                        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding ProcessName, TargetNullValue='-'}"
+                                   Foreground="{DynamicResource TextBrush}" Margin="0,12,0,10"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="窗口" Foreground="{DynamicResource MutedBrush}"
+                                   Margin="0,10,18,12"/>
+                        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding WindowTitle, TargetNullValue='-'}"
+                                   Foreground="{DynamicResource TextBrush}" TextWrapping="Wrap"
+                                   Margin="0,10,0,12"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Bottom left: Today's time -->
+        <Border Grid.Row="1" Grid.Column="0"
+                Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                Margin="0,0,7,0" Padding="24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="今日用时" FontSize="16" FontWeight="Bold"
+                           Foreground="{DynamicResource MutedBrush}" Margin="0,20,0,12"/>
+
+                <TextBlock Grid.Row="1" Text="{Binding UsedSeconds, Converter={StaticResource SecondsToText}}"
+                           FontSize="34" FontWeight="Bold" Foreground="{DynamicResource TextBrush}"
+                           Margin="0,0,0,20"/>
+            </Grid>
+        </Border>
+
+        <!-- Bottom right: Progress + remaining -->
+        <Border Grid.Row="1" Grid.Column="1"
+                Background="{DynamicResource SurfaceBrush}"
+                CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                Padding="24">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.Row="0" Text="进度" FontSize="16" FontWeight="Bold"
+                           Foreground="{DynamicResource MutedBrush}" Margin="0,20,0,12"/>
+
+                <ProgressBar Grid.Row="1" Height="12" Minimum="0" Maximum="1"
+                             Value="{Binding UsedPercent, Mode=OneWay}" Margin="0,0,0,12"
+                             BorderThickness="0" Style="{StaticResource {x:Type ProgressBar}}">
+                    <ProgressBar.Resources>
+                        <Style TargetType="ProgressBar">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="ProgressBar">
+                                        <Border CornerRadius="8" Background="{DynamicResource SurfaceAltBrush}">
+                                            <Border CornerRadius="8" Background="{DynamicResource GreenBrush}"
+                                                    Width="{TemplateBinding Width}" HorizontalAlignment="Left">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding UsedPercent}" Value="1.0">
+                                                                <Setter Property="Background" Value="{DynamicResource RedBrush}"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                            </Border>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ProgressBar.Resources>
+                </ProgressBar>
+
+                <TextBlock Grid.Row="2" Text="{Binding LimitText}"
+                           Foreground="{DynamicResource MutedBrush}" Margin="0,4,0,0"/>
+
+                <TextBlock Grid.Row="3" Text="{Binding RemainingText}"
+                           Foreground="{DynamicResource MutedBrush}" Margin="0,6,0,0"/>
+
+                <TextBlock Grid.Row="4" Text="{Binding UsedPercent, Converter={StaticResource PercentToText}}"
+                           FontSize="18" FontWeight="Bold" Foreground="{DynamicResource MutedBrush}"
+                           Margin="0,20,0,0"/>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

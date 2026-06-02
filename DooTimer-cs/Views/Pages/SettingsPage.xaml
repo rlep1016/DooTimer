@@ -1,0 +1,181 @@
+<UserControl x:Class="DooTimer.Views.Pages.SettingsPage"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:DooTimer.Converters">
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="0,0,-8,0">
+        <Grid Margin="0,0,8,14">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 设置卡片 -->
+            <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}"
+                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    Padding="22">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- 模式切换 -->
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="运行模式"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="0" Grid.Column="1" x:Name="ModeComboBox" Height="38"
+                              Margin="22,6,0,6" SelectedIndex="0" VerticalAlignment="Center"
+                              Style="{StaticResource ThemedComboBox}">
+                        <ComboBoxItem Content="限制模式 — 设额度，到时间提醒"/>
+                        <ComboBoxItem Content="统计模式 — 只记录时间，不打扰"/>
+                    </ComboBox>
+
+                    <!-- 统计模式说明 -->
+                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TrackModeHint"
+                               Text="统计模式下不限制时间，无需设置每日上限和提醒规则。"
+                               Foreground="{DynamicResource Muted2Brush}"
+                               FontSize="12" Margin="22,62,0,0" Visibility="Collapsed"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="每日上限（分钟）"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" x:Name="DailyLimitEntry" Height="38"
+                             Margin="22,6,0,6" VerticalAlignment="Center" Style="{StaticResource SettingTextBox}"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="提前提醒百分比"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" x:Name="RemindPercentEntry" Height="38"
+                             Margin="22,6,0,6" VerticalAlignment="Center" Style="{StaticResource SettingTextBox}"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="超时重复提醒（分钟）"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" x:Name="OverLimitEntry" Height="38"
+                             Margin="22,6,0,6" VerticalAlignment="Center" Style="{StaticResource SettingTextBox}"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="检测间隔（秒）"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" x:Name="PollIntervalEntry" Height="38"
+                             Margin="22,6,0,6" VerticalAlignment="Center" Style="{StaticResource SettingTextBox}"/>
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="客户端进程名"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" x:Name="ClientNamesEntry" Height="38"
+                             Margin="22,6,0,6" VerticalAlignment="Center" Style="{StaticResource SettingTextBox}"/>
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="浏览器进程名"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" x:Name="BrowserNamesEntry" Height="38"
+                             Margin="22,6,0,6" VerticalAlignment="Center" Style="{StaticResource SettingTextBox}"/>
+
+                    <TextBlock Grid.Row="7" Grid.Column="0" Text="网页标题关键词"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="7" Grid.Column="1" x:Name="KeywordsEntry" Height="38"
+                             Margin="22,6,0,6" VerticalAlignment="Center" Style="{StaticResource SettingTextBox}"/>
+
+                    <!-- 强制关闭开关 -->
+                    <CheckBox Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"
+                              x:Name="ForceCloseCheckBox"
+                              Content="每日额度用完时强制关闭抖音（含网页端）"
+                              Foreground="{DynamicResource TextBrush}"
+                              Margin="0,14,0,0"/>
+
+                    <!-- 休息提醒（仅统计模式生效） -->
+                    <TextBlock Grid.Row="9" Grid.Column="0" Text="休息提醒间隔（分）"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"
+                               ToolTip="统计模式下，连续刷抖音达到此分钟数时提醒休息。设为 0 则关闭。"/>
+                    <Grid Grid.Row="9" Grid.Column="1" Margin="22,6,0,6" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox Grid.Column="0" x:Name="RestReminderEntry" Height="38"
+                                 Style="{StaticResource SettingTextBox}"/>
+                        <TextBlock Grid.Column="1" Text="（0=关闭，仅统计模式生效）"
+                                   Foreground="{DynamicResource Muted2Brush}"
+                                   FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                    </Grid>
+
+                    <!-- 外观主题 -->
+                    <TextBlock Grid.Row="10" Grid.Column="0" Text="外观主题"
+                               Foreground="{DynamicResource MutedBrush}" VerticalAlignment="Center"/>
+                    <ComboBox Grid.Row="10" Grid.Column="1" x:Name="ThemeComboBox" Height="38"
+                              Margin="22,6,0,6" VerticalAlignment="Center"
+                              Style="{StaticResource ThemedComboBox}">
+                        <ComboBoxItem Content="亮色"/>
+                        <ComboBoxItem Content="暗色"/>
+                        <ComboBoxItem Content="随系统"/>
+                    </ComboBox>
+
+                    <!-- 保存按钮 + 提示 -->
+                    <StackPanel Grid.Row="11" Grid.Column="0" Grid.ColumnSpan="2"
+                                Orientation="Vertical" Margin="0,28,0,0">
+                        <TextBlock x:Name="SaveMessage" FontSize="12" Margin="0,0,0,6" Visibility="Collapsed"/>
+                        <Button Content="保存设置" Width="120" Height="38"
+                                HorizontalAlignment="Right"
+                                Background="{DynamicResource BlueBrush}"
+                                Foreground="White"
+                                Style="{StaticResource RoundedButton}"
+                                Click="SaveSettings_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- 开机启动卡片 -->
+            <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}"
+                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    Padding="22">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="系统集成" FontSize="18" FontWeight="Bold"
+                               Foreground="{DynamicResource TextBrush}" Margin="0,20,0,4"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                               Text="把 DooTimer 加入当前用户的 Windows 开机启动，不需要管理员权限。"
+                               Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,14"/>
+
+                    <Border Grid.Row="2" Grid.Column="0" x:Name="StartupStatusLabel"
+                            CornerRadius="24" Padding="10,6" HorizontalAlignment="Left" MinWidth="150"
+                            VerticalAlignment="Center">
+                        <TextBlock x:Name="StartupStatusText" Text="正在检查..." FontSize="13" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <Button x:Name="EnableStartupBtn" Content="开启开机启动" Width="126" Height="36"
+                                Background="{DynamicResource BlueBrush}" Foreground="White"
+                                Style="{StaticResource RoundedButton}" Click="EnableStartup_Click" Margin="0,0,8,0"/>
+                        <Button x:Name="DisableStartupBtn" Content="关闭开机启动" Width="126" Height="36"
+                                Background="{DynamicResource SurfaceAltBrush}"
+                                Foreground="{DynamicResource TextBrush}"
+                                Style="{StaticResource RoundedButton}" Click="DisableStartup_Click"/>
+                    </StackPanel>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" x:Name="StartupTargetLabel"
+                               Foreground="{DynamicResource Muted2Brush}" Margin="0,10,0,18"/>
+                </Grid>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

@@ -1,0 +1,29 @@
+# .NET build outputs
+bin/
+obj/
+*.user
+*.suo
+.vs/
+
+# Publish output
+publish/
+
+# Data / logs (user-specific, stored in %AppData%)
+data/
+logs/
+
+# Python leftovers
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Reasonix internal
+.reasonix/
+
+# Local notes
+agents.md
+
+# OS
+.DS_Store
+Thumbs.db
