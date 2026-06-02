@@ -2,7 +2,7 @@
 ; 用法: ISCC.exe setup.iss
 
 #define MyAppName "DooTimer"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.2.0"
 #define MyAppPublisher "rlep1016"
 #define MyAppURL "https://github.com/rlep1016/DooTimer"
 #define MyAppExeName "DooTimer.exe"
