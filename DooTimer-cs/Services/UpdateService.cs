@@ -245,7 +245,9 @@ public class UpdateService
 
     private static int[] ParseVersion(string v)
     {
-        var parts = v.Split('-')[0].Split('.');
+        // 去掉 commit hash 后缀（1.2.1+d7f9b16 → 1.2.1）
+        v = v.Split('+')[0].Split('-')[0];
+        var parts = v.Split('.');
         var result = new int[4];
         for (int i = 0; i < 4; i++)
             result[i] = i < parts.Length && int.TryParse(parts[i], out var n) ? n : 0;
