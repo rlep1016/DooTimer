@@ -125,27 +125,29 @@ public partial class App : System.Windows.Application
         _tracker.Start();
         _trayService.Show();
 
-        // 延迟 3 秒后清理旧安装包 + 检查更新（不阻塞启动）
+        // 延迟 3 秒后检查更新，更新完成则清理旧安装包
         _ = Task.Run(async () =>
         {
             await Task.Delay(3000);
+            await _updateService.CheckAsync();
 
-            // 清理临时目录中的旧安装包
-            try
+            // 如果已是最新版本，说明上次更新成功了，清理旧安装包
+            if (_updateService.Info.State == UpdateState.UpToDate)
             {
-                var updateDir = Path.Combine(Path.GetTempPath(), "DooTimer", "update");
-                if (Directory.Exists(updateDir))
+                try
                 {
-                    foreach (var f in Directory.GetFiles(updateDir, "*.exe"))
+                    var updateDir = Path.Combine(Path.GetTempPath(), "DooTimer", "update");
+                    if (Directory.Exists(updateDir))
                     {
-                        try { File.Delete(f); }
-                        catch { /* 文件可能正在使用 */ }
+                        foreach (var f in Directory.GetFiles(updateDir, "*.exe"))
+                        {
+                            try { File.Delete(f); }
+                            catch { }
+                        }
                     }
                 }
+                catch { }
             }
-            catch { }
-
-            await _updateService.CheckAsync();
         });
 
         // 开机启动时不显示窗口，只在托盘运行
