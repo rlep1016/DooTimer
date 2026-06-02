@@ -32,7 +32,7 @@
                         <TextBlock Text="DooTimer" FontSize="26" FontWeight="Bold"
                                    Foreground="{DynamicResource TextBrush}"/>
                         <TextBlock Margin="0,2,0,0" Foreground="{DynamicResource MutedBrush}">
-                            <Run x:Name="VersionText" Text="版本 1.0.0"/>
+                            <Run x:Name="VersionText" Text="版本 1.1.0"/>
                             <Run Text=" · Windows 前台抖音时间监控工具"/>
                         </TextBlock>
                     </StackPanel>

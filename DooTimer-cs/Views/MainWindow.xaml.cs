@@ -31,6 +31,7 @@ public partial class MainWindow : Window
     private readonly uint _wakeMsgId;
 
     private readonly TrayService _trayService;
+    private readonly UpdateService _updateService;
 
     // 任务栏覆盖标签
     private readonly Window _overlay;
@@ -52,7 +53,8 @@ public partial class MainWindow : Window
         Func<UsageSummary> getDataSummary,
         Func<string> exportCsv,
         TrayService trayService,
-        Action stopApp)
+        Action stopApp,
+        UpdateService updateService)
     {
         InitializeComponent();
 
@@ -61,6 +63,7 @@ public partial class MainWindow : Window
         _getDataSummary = getDataSummary;
         _exportCsv = exportCsv;
         _trayService = trayService;
+        _updateService = updateService;
         _stopApp = stopApp;
 
         _baseDir = AppContext.BaseDirectory;
@@ -84,7 +87,32 @@ public partial class MainWindow : Window
             StartupService.GetStartupTargetSummary);
 
         _dataPage = new DataPage(getDataSummary, exportCsv);
-        _aboutPage = new AboutPage(exportCsv, _baseDir, _configPath, _usagePath, _logPath);
+        _aboutPage = new AboutPage(exportCsv, _baseDir, _configPath, _usagePath, _logPath, _updateService);
+
+        // 有更新时在关于按钮上加红点（不改原有图标）
+        var aboutBadge = new System.Windows.Controls.Border
+        {
+            Width = 8,
+            Height = 8,
+            CornerRadius = new CornerRadius(4),
+            Background = new SolidColorBrush(System.Windows.Media.Color.FromRgb(220, 38, 38)),
+            Margin = new Thickness(6, 0, 0, 0),
+            VerticalAlignment = VerticalAlignment.Center,
+            Visibility = Visibility.Collapsed
+        };
+        if (BtnAbout.Content is System.Windows.Controls.StackPanel sp)
+            sp.Children.Add(aboutBadge);
+
+        _updateService.StateChanged += () =>
+        {
+            Dispatcher.Invoke(() =>
+            {
+                var show = _updateService.Info.State == UpdateState.Available ||
+                           _updateService.Info.State == UpdateState.Downloaded ||
+                           _updateService.Info.State == UpdateState.Downloading;
+                aboutBadge.Visibility = show ? Visibility.Visible : Visibility.Collapsed;
+            });
+        };
 
         _wakeMsgId = NativeMethods.RegisterWindowMessage("DooTimerWakeMainWindow");
 

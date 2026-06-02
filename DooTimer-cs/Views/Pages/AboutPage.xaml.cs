@@ -1,14 +1,22 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Threading;
 using DooTimer.Converters;
 using DooTimer.Helpers;
+using DooTimer.Services;
 
 namespace DooTimer.Views.Pages;
 
 public partial class AboutPage : System.Windows.Controls.UserControl
 {
     private readonly Func<string> _exportCsv;
+    private readonly UpdateService _updateService;
+
+    // 更新 UI 元素
+    private Border? _updateBorder;
+    private TextBlock? _updateStatusText;
+    private System.Windows.Controls.Button? _updateButton;
 
     // 路径将在初始化时传入
     private readonly string _projectDir;
@@ -24,10 +32,12 @@ public partial class AboutPage : System.Windows.Controls.UserControl
         string projectDir,
         string configPath,
         string usagePath,
-        string logPath)
+        string logPath,
+        UpdateService updateService)
     {
         InitializeComponent();
         _exportCsv = exportCsv;
+        _updateService = updateService;
         _projectDir = projectDir;
         _configPath = configPath;
         _usagePath = usagePath;
@@ -35,6 +45,151 @@ public partial class AboutPage : System.Windows.Controls.UserControl
         _dataDir = Path.GetDirectoryName(usagePath) ?? "";
         _logDir = Path.GetDirectoryName(logPath) ?? "";
         _exportDir = Path.Combine(_dataDir, "exports");
+
+        BuildUpdateSection();
+        _updateService.StateChanged += () => Dispatcher.Invoke(RefreshUpdateUI);
+    }
+
+    private void BuildUpdateSection()
+    {
+        _updateBorder = new Border
+        {
+            Background = AppColors.SurfaceBrush,
+            CornerRadius = new CornerRadius(24),
+            BorderBrush = AppColors.LineBrush,
+            BorderThickness = new Thickness(1),
+            Margin = new Thickness(0, 0, 0, 14),
+            Padding = new Thickness(22)
+        };
+
+        var stack = new StackPanel();
+        stack.Children.Add(new TextBlock
+        {
+            Text = "软件更新",
+            FontSize = 18,
+            FontWeight = FontWeights.Bold,
+            Foreground = AppColors.TextBrush,
+            Margin = new Thickness(0, 20, 0, 4)
+        });
+
+        _updateStatusText = new TextBlock
+        {
+            Text = "点击按钮检查更新",
+            Foreground = AppColors.MutedBrush,
+            Margin = new Thickness(0, 0, 0, 12),
+            TextWrapping = TextWrapping.Wrap
+        };
+        stack.Children.Add(_updateStatusText);
+
+        _updateButton = new System.Windows.Controls.Button
+        {
+            Content = "检查更新",
+            Height = 38,
+            Style = System.Windows.Application.Current.Resources["RoundedButton"] as Style,
+            Background = AppColors.BlueBrush,
+            Foreground = new SolidColorBrush(System.Windows.Media.Color.FromRgb(255, 255, 255)),
+            FontWeight = FontWeights.Bold,
+            Margin = new Thickness(0, 0, 0, 18)
+        };
+        _updateButton.Click += UpdateButton_Click;
+        stack.Children.Add(_updateButton);
+
+        _updateBorder.Child = stack;
+
+        // Content 是 ScrollViewer，需要取出里面的 Grid
+        var mainGrid = (Content as ScrollViewer)?.Content as System.Windows.Controls.Grid;
+        if (mainGrid != null)
+        {
+            mainGrid.RowDefinitions.Add(new RowDefinition { Height = GridLength.Auto });
+            foreach (var child in mainGrid.Children.OfType<Border>())
+            {
+                var row = System.Windows.Controls.Grid.GetRow(child);
+                if (row >= 2) System.Windows.Controls.Grid.SetRow(child, row + 1);
+            }
+            System.Windows.Controls.Grid.SetRow(_updateBorder, 2);
+            mainGrid.Children.Add(_updateBorder);
+        }
+    }
+
+    private void RefreshUpdateUI()
+    {
+        if (_updateStatusText == null || _updateButton == null) return;
+
+        var info = _updateService.Info;
+
+        switch (info.State)
+        {
+            case UpdateState.Idle:
+                _updateStatusText.Text = "点击按钮检查更新";
+                _updateStatusText.Foreground = AppColors.MutedBrush;
+                _updateButton.Content = "检查更新";
+                _updateButton.Background = AppColors.BlueBrush;
+                _updateButton.IsEnabled = true;
+                break;
+
+            case UpdateState.Checking:
+                _updateStatusText.Text = "正在检查...";
+                _updateStatusText.Foreground = AppColors.MutedBrush;
+                _updateButton.Content = "检查中...";
+                _updateButton.IsEnabled = false;
+                break;
+
+            case UpdateState.UpToDate:
+                _updateStatusText.Text = info.Message;
+                _updateStatusText.Foreground = AppColors.GreenBrush;
+                _updateButton.Content = "检查更新";
+                _updateButton.IsEnabled = true;
+                break;
+
+            case UpdateState.Available:
+                _updateStatusText.Text = info.Message;
+                _updateStatusText.Foreground = AppColors.BlueBrush;
+                _updateButton.Content = "下载更新";
+                _updateButton.IsEnabled = true;
+                break;
+
+            case UpdateState.Downloading:
+                _updateStatusText.Text = info.Message;
+                _updateStatusText.Foreground = AppColors.BlueBrush;
+                _updateButton.Content = "下载中...";
+                _updateButton.IsEnabled = false;
+                break;
+
+            case UpdateState.Downloaded:
+                _updateStatusText.Text = info.Message;
+                _updateStatusText.Foreground = AppColors.GreenBrush;
+                _updateButton.Content = "安装更新";
+                _updateButton.Background = AppColors.GreenBrush;
+                _updateButton.IsEnabled = true;
+                break;
+
+            case UpdateState.Error:
+                _updateStatusText.Text = info.Message;
+                _updateStatusText.Foreground = AppColors.RedBrush;
+                _updateButton.Content = "重试";
+                _updateButton.IsEnabled = true;
+                break;
+        }
+    }
+
+    private async void UpdateButton_Click(object sender, RoutedEventArgs e)
+    {
+        var state = _updateService.Info.State;
+
+        switch (state)
+        {
+            case UpdateState.Idle:
+            case UpdateState.UpToDate:
+            case UpdateState.Error:
+                await _updateService.CheckAsync();
+                break;
+            case UpdateState.Available:
+                await _updateService.DownloadAsync();
+                break;
+            case UpdateState.Downloaded:
+                _updateService.Info.InstallAction?.Invoke();
+                break;
+        }
     }
 
     public void RefreshHealth()

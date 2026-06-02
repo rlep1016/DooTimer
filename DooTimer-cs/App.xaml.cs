@@ -11,6 +11,7 @@ public partial class App : System.Windows.Application
     private SingleInstanceService? _singleInstance;
     private UsageTracker? _tracker;
     private TrayService? _trayService;
+    private UpdateService? _updateService;
     private MainWindow? _mainWindow;
 
     private string BaseDir => AppContext.BaseDirectory;
@@ -108,12 +109,28 @@ public partial class App : System.Windows.Application
         // 注入托盘气泡通知，替代 MessageBox
         notifier.SetNotificationAction((title, msg) => _trayService.ShowBalloonTip(title, msg));
 
+        // 日志回调（供各服务共用）
+        Action<string, string> logDebug = (tag, msg) =>
+            System.IO.File.AppendAllText(
+                LogPath,
+                $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} [{tag}] {msg}\n");
+
+        // 初始化更新服务
+        _updateService = new UpdateService(logDebug);
+
         Action stopApp = () => { _tracker?.Stop(); _tracker?.Flush(); };
 
-        _mainWindow = new MainWindow(_tracker, configService, getDataSummary, exportCsv, _trayService, stopApp);
+        _mainWindow = new MainWindow(_tracker, configService, getDataSummary, exportCsv, _trayService, stopApp, _updateService);
 
         _tracker.Start();
         _trayService.Show();
+
+        // 延迟 3 秒后后台检查更新（不阻塞启动）
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(3000);
+            await _updateService.CheckAsync();
+        });
 
         // 开机启动时不显示窗口，只在托盘运行
         var args = Environment.GetCommandLineArgs();

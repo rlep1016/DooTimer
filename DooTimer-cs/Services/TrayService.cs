@@ -8,6 +8,7 @@ public class TrayService : IDisposable
     private readonly Action _stopApp;
     private readonly Func<string> _getStatusText;
     private System.Windows.Forms.NotifyIcon? _notifyIcon;
+    private Action? _onUpdateBalloonClick;
     private readonly string _configPath;
     private readonly string _usagePath;
 
@@ -95,6 +96,44 @@ public class TrayService : IDisposable
             // 气泡通知失败时降级到 MessageBox（Win11 上已弃用托盘气泡）
             new Notifier().Notify(title, text);
         }
+    }
+
+    /// <summary>显示更新通知气球，点击后触发更新安装。</summary>
+    public void ShowUpdateBalloon(string message, Action onInstall)
+    {
+        _onUpdateBalloonClick = onInstall;
+        ShowBalloonTip("发现新版本", message);
+
+        // Win11 上 BalloonTipClicked 可能无效，降级到消息框
+        // 延迟显示消息框作为备用方案
+        Task.Delay(6000).ContinueWith(_ =>
+        {
+            if (_onUpdateBalloonClick != null)
+            {
+                System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                {
+                    if (_onUpdateBalloonClick != null)
+                    {
+                        var result = System.Windows.MessageBox.Show(
+                            message + "\n\n是否立即安装更新？",
+                            "DooTimer 更新",
+                            System.Windows.MessageBoxButton.YesNo,
+                            System.Windows.MessageBoxImage.Information);
+
+                        if (result == System.Windows.MessageBoxResult.Yes)
+                        {
+                            var handler = _onUpdateBalloonClick;
+                            _onUpdateBalloonClick = null;
+                            handler();
+                        }
+                        else
+                        {
+                            _onUpdateBalloonClick = null;
+                        }
+                    }
+                });
+            }
+        });
     }
 
     /// <summary>实时更新托盘图标的 hover 提示文字。</summary>
