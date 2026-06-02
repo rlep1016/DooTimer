@@ -51,7 +51,7 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="210"/>
+            <ColumnDefinition Width="220" MinWidth="160"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
@@ -69,15 +69,20 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
-                <!-- 鍝佺墝 -->
+                <!-- 品牌 -->
                 <TextBlock Grid.Row="0" Text="DooTimer" FontSize="21" FontWeight="Bold"
                            Foreground="{DynamicResource TextBrush}"
-                           Margin="18,24,18,20"/>
+                           Margin="18,24,18,14"/>
+
+                <!-- 分隔线 -->
+                <Border Grid.Row="1" Height="1" Background="{DynamicResource LineBrush}"
+                        Margin="18,4,18,2"/>
 
                 <!-- 导航按钮 -->
-                <Button x:Name="BtnOverview" Grid.Row="1" Style="{StaticResource ActiveSidebarButton}"
+                <Button x:Name="BtnOverview" Grid.Row="2" Style="{StaticResource ActiveSidebarButton}"
                         Click="NavClick" Tag="overview">
                     <StackPanel Orientation="Horizontal">
                         <Path Data="M3,3 h4 v4 h-4 z M9,3 h4 v4 h-4 z M3,9 h4 v4 h-4 z M9,9 h4 v4 h-4 z" 
@@ -86,7 +91,7 @@
                         <TextBlock Text="总览" Margin="12,0,0,0"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="BtnSettings" Grid.Row="2" Style="{StaticResource SidebarButton}"
+                <Button x:Name="BtnSettings" Grid.Row="3" Style="{StaticResource SidebarButton}"
                         Click="NavClick" Tag="settings">
                     <StackPanel Orientation="Horizontal">
                         <Path Data="M2,4 h12 M4,2 v4 M2,9 h12 M8,7 v4 M2,14 h12 M6,12 v4" 
@@ -95,7 +100,7 @@
                         <TextBlock Text="设置" Margin="12,0,0,0"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="BtnData" Grid.Row="3" Style="{StaticResource SidebarButton}"
+                <Button x:Name="BtnData" Grid.Row="4" Style="{StaticResource SidebarButton}"
                         Click="NavClick" Tag="data">
                     <StackPanel Orientation="Horizontal">
                         <Path Data="M2,14 v-9 h3 v9 z M6,14 v-6 h3 v6 z M10,14 v-3 h3 v3 z" 
@@ -104,7 +109,7 @@
                         <TextBlock Text="数据" Margin="12,0,0,0"/>
                     </StackPanel>
                 </Button>
-                <Button x:Name="BtnAbout" Grid.Row="4" Style="{StaticResource SidebarButton}"
+                <Button x:Name="BtnAbout" Grid.Row="5" Style="{StaticResource SidebarButton}"
                         Click="NavClick" Tag="about">
                     <StackPanel Orientation="Horizontal">
                         <Path Data="M8,14 A6,6 0 1,0 8,2 A6,6 0 1,0 8,14 Z M8,6 v5 M8,4.5 v1" 
@@ -115,18 +120,18 @@
                 </Button>
 
                 <!-- 状态指示 -->
-                <Border x:Name="SideStatus" Grid.Row="5" CornerRadius="12" Margin="18,22,18,8" Height="34"
+                <Border x:Name="SideStatus" Grid.Row="6" CornerRadius="12" Margin="18,22,18,8" Height="34"
                         Background="{DynamicResource GreenSoftBrush}">
                     <TextBlock x:Name="SideStatusText" Text="未检测到抖音" FontSize="13" FontWeight="Bold"
-                               Foreground="{DynamicResource GreenBrush}"
+                               Foreground="White"
                                HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
 
-                <TextBlock Grid.Row="6" Text="关闭主窗口后仍会在托盘继续监控。" Foreground="{DynamicResource Muted2Brush}" FontSize="12"
+                <TextBlock Grid.Row="7" Text="关闭主窗口后仍会在托盘继续监控。" Foreground="{DynamicResource Muted2Brush}" FontSize="12"
                            Margin="22,0,22,0" TextWrapping="Wrap"/>
 
-                <!-- 閫€鍑烘寜閽?-->
-                <Button Grid.Row="9" Content="退出 DooTimer" Height="38"
+                <!-- 退出 -->
+                <Button Grid.Row="10" Content="退出 DooTimer" Height="38"
                         Margin="18,0,18,22"
                         Background="{DynamicResource RedSoftBrush}"
                         Foreground="{DynamicResource RedBrush}"

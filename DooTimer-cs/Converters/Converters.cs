@@ -98,13 +98,13 @@ public static class AppColors
     private const string LightMuted2 = "#98a2b3";
 
     // 暗色模式
-    private const string DarkBg = "#1a1a2e";
-    private const string DarkSurface = "#252540";
-    private const string DarkSurfaceAlt = "#2d2d4a";
-    private const string DarkLine = "#3a3a5c";
-    private const string DarkText = "#e8e8f0";
-    private const string DarkMuted = "#9898b8";
-    private const string DarkMuted2 = "#707090";
+    private const string DarkBg = "#0d1117";
+    private const string DarkSurface = "#161b22";
+    private const string DarkSurfaceAlt = "#21262d";
+    private const string DarkLine = "#30363d";
+    private const string DarkText = "#e6edf3";
+    private const string DarkMuted = "#8b949e";
+    private const string DarkMuted2 = "#6e7681";
 
     // 当前使用的色值（对外暴露为常量风格）
     public const string Bg = "#f5f7fb";

@@ -218,7 +218,7 @@ public partial class AboutPage : System.Windows.Controls.UserControl
             Background = AppColors.SurfaceAltBrush,
             CornerRadius = new CornerRadius(8),
             Padding = new Thickness(14, 10, 14, 10),
-            Margin = new Thickness(0, 5, 0, 5)
+            Margin = new Thickness(0, 0, 0, 12)
         };
 
         var grid = new Grid();

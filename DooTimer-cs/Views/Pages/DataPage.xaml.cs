@@ -138,11 +138,9 @@ public partial class DataPage : System.Windows.Controls.UserControl
             }
             else
             {
-                var r = (byte)(ratio >= 0.5 ? 220 : (int)(110 + ratio * 2 * 110));
-                var g = (byte)(ratio >= 0.5 ? (int)(175 * (2 - ratio * 2)) : 175);
-                var b = (byte)(ratio >= 0.5 ? 31 : (int)(31 + ratio * 2 * 52));
+                // 统一蓝色调，ratio 越高越深
                 color = new System.Windows.Media.SolidColorBrush(
-                    System.Windows.Media.Color.FromRgb(r, g, b));
+                    System.Windows.Media.Color.FromRgb(56, (byte)(139 - (int)(ratio * 39)), (byte)(155 + (int)(ratio * 100))));
             }
 
             var cell = new System.Windows.Controls.Grid { Margin = new System.Windows.Thickness(4, 0, 4, 0) };
@@ -265,12 +263,9 @@ public partial class DataPage : System.Windows.Controls.UserControl
             }
             else
             {
-                // ratio 越低 → 绿色，越高 → 红色
-                var r = (byte)(ratio >= 0.5 ? 220 : (int)(110 + ratio * 2 * 110));
-                var g = (byte)(ratio >= 0.5 ? (int)(175 * (2 - ratio * 2)) : 175);
-                var b = (byte)(ratio >= 0.5 ? 31 : (int)(31 + ratio * 2 * 52));
+                // 统一蓝色调，ratio 越高越深
                 color = new System.Windows.Media.SolidColorBrush(
-                    System.Windows.Media.Color.FromRgb(r, g, b));
+                    System.Windows.Media.Color.FromRgb(56, (byte)(139 - (int)(ratio * 39)), (byte)(155 + (int)(ratio * 100))));
             }
 
             var bar = new System.Windows.Controls.Border

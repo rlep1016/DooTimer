@@ -126,7 +126,7 @@
                                Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,14"/>
                     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled"
                                   Margin="0,0,0,20" PreviewMouseWheel="HourlyScroll_PreviewMouseWheel">
-                        <Grid x:Name="HourlyChart" Height="160" MinWidth="960"/>
+                        <Grid x:Name="HourlyChart" Height="160" MinWidth="600"/>
                     </ScrollViewer>
                 </StackPanel>
             </Border>
