@@ -125,10 +125,26 @@ public partial class App : System.Windows.Application
         _tracker.Start();
         _trayService.Show();
 
-        // 延迟 3 秒后后台检查更新（不阻塞启动）
+        // 延迟 3 秒后清理旧安装包 + 检查更新（不阻塞启动）
         _ = Task.Run(async () =>
         {
             await Task.Delay(3000);
+
+            // 清理临时目录中的旧安装包
+            try
+            {
+                var updateDir = Path.Combine(Path.GetTempPath(), "DooTimer", "update");
+                if (Directory.Exists(updateDir))
+                {
+                    foreach (var f in Directory.GetFiles(updateDir, "*.exe"))
+                    {
+                        try { File.Delete(f); }
+                        catch { /* 文件可能正在使用 */ }
+                    }
+                }
+            }
+            catch { }
+
             await _updateService.CheckAsync();
         });
 
