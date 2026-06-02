@@ -39,6 +39,4 @@ jobs:
     - name: Upload Release Assets
       uses: softprops/action-gh-release@v2
       with:
-        files: |
-          DooTimer-cs/publish/DooTimer.exe
-          DooTimer-cs/installer/DooTimer-Setup-*.exe
+        files: DooTimer-cs/installer/DooTimer-Setup-*.exe
