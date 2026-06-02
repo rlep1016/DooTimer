@@ -24,7 +24,18 @@ jobs:
       run: dotnet publish DooTimer.csproj -c Release -r win-x64 -p:PublishSingleFile=true -p:SelfContained=true -o publish
       working-directory: DooTimer-cs
 
-    - name: Upload Release Asset
+    - name: Install Inno Setup
+      run: choco install innosetup -y --no-progress
+      working-directory: DooTimer-cs
+
+    - name: Build Installer
+      run: |
+        & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" setup.iss
+      working-directory: DooTimer-cs
+
+    - name: Upload Release Assets
       uses: softprops/action-gh-release@v2
       with:
-        files: DooTimer-cs/publish/DooTimer.exe
+        files: |
+          DooTimer-cs/publish/DooTimer.exe
+          DooTimer-cs/installer/DooTimer-Setup-*.exe
