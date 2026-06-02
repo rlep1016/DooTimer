@@ -23,7 +23,7 @@
         <!-- Hero: Full-width status card -->
         <Border Grid.Row="0" Grid.ColumnSpan="2"
                 Background="{DynamicResource SurfaceBrush}"
-                CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                 Margin="0,0,0,14" Padding="24">
             <Grid>
                 <Grid.RowDefinitions>
@@ -111,7 +111,7 @@
         <!-- Bottom left: Today's time -->
         <Border Grid.Row="1" Grid.Column="0"
                 Background="{DynamicResource SurfaceBrush}"
-                CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                 Margin="0,0,7,0" Padding="24">
             <Grid>
                 <Grid.RowDefinitions>
@@ -131,7 +131,7 @@
         <!-- Bottom right: Progress + remaining -->
         <Border Grid.Row="1" Grid.Column="1"
                 Background="{DynamicResource SurfaceBrush}"
-                CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                 Padding="24">
             <Grid>
                 <Grid.RowDefinitions>

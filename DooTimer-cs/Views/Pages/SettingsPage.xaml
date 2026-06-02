@@ -12,7 +12,7 @@
 
             <!-- 设置卡片 -->
             <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}"
-                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                     Padding="22">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -135,7 +135,7 @@
 
             <!-- 开机启动卡片 -->
             <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}"
-                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                     Padding="22">
                 <Grid>
                     <Grid.RowDefinitions>

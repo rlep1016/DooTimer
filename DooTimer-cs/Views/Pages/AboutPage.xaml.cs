@@ -55,7 +55,7 @@ public partial class AboutPage : System.Windows.Controls.UserControl
         _updateBorder = new Border
         {
             Background = AppColors.SurfaceBrush,
-            CornerRadius = new CornerRadius(24),
+            CornerRadius = new CornerRadius(14),
             BorderBrush = AppColors.LineBrush,
             BorderThickness = new Thickness(1),
             Margin = new Thickness(0, 0, 0, 14),

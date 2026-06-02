@@ -5,6 +5,9 @@
              Startup="Application_Startup">
     <Application.Resources>
         <!-- 涓婚鐢荤瑪锛堝垵濮嬩寒鑹诧紝杩愯鏃剁敱浠ｇ爜鏇挎崲锛?-->
+        <!-- 卡片阴影（Fluent 2 风格微弱投影） -->
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="8" ShadowDepth="1" Opacity="0.08" Direction="270"/>
+
         <SolidColorBrush x:Key="BgBrush" Color="#f5f7fb"/>
         <SolidColorBrush x:Key="SurfaceBrush" Color="#ffffff"/>
         <SolidColorBrush x:Key="SurfaceAltBrush" Color="#eef2f7"/>
@@ -168,15 +171,29 @@
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Padding" Value="0"/>
+            <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}"
-                                CornerRadius="16"
-                                Padding="{TemplateBinding Padding}">
+                        <Border Name="Bd" Background="{TemplateBinding Background}"
+                                CornerRadius="12"
+                                Padding="{TemplateBinding Padding}"
+                                RenderTransformOrigin="0.5,0.5">
+                            <Border.RenderTransform>
+                                <ScaleTransform/>
+                            </Border.RenderTransform>
                             <ContentPresenter HorizontalAlignment="Center"
                                               VerticalAlignment="Center"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Bd" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="0.97" ScaleY="0.97"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
@@ -195,7 +212,7 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
                         <Border Background="{TemplateBinding Background}"
-                                CornerRadius="16"
+                                CornerRadius="12"
                                 Padding="{TemplateBinding Padding}"
                                 Margin="4,4,4,4">
                             <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"

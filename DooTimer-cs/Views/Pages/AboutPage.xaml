@@ -14,7 +14,7 @@
 
             <!-- 产品信息 -->
             <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}"
-                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                     Margin="0,0,0,14" Padding="22">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -41,7 +41,7 @@
 
             <!-- 文件操作 -->
             <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}"
-                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                     Margin="0,0,0,14" Padding="22">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -87,7 +87,7 @@
 
             <!-- 文件状态 -->
             <Border Grid.Row="2" Background="{DynamicResource SurfaceBrush}"
-                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                     Margin="0,0,0,14" Padding="22">
                 <StackPanel>
                     <TextBlock Text="状态与排错" FontSize="18" FontWeight="Bold"
@@ -100,7 +100,7 @@
 
             <!-- 运行方式说明 -->
             <Border Grid.Row="3" Background="{DynamicResource SurfaceBrush}"
-                    CornerRadius="24" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
+                    CornerRadius="14" BorderBrush="{DynamicResource LineBrush}" BorderThickness="1"
                     Margin="0,0,0,14" Padding="22">
                 <StackPanel>
                     <TextBlock Text="运行方式" FontSize="18" FontWeight="Bold"
