@@ -5,9 +5,6 @@
              Startup="Application_Startup">
     <Application.Resources>
         <!-- 涓婚鐢荤瑪锛堝垵濮嬩寒鑹诧紝杩愯鏃剁敱浠ｇ爜鏇挎崲锛?-->
-        <!-- 卡片阴影（Fluent 2 风格微弱投影） -->
-        <DropShadowEffect x:Key="CardShadow" BlurRadius="8" ShadowDepth="1" Opacity="0.08" Direction="270"/>
-
         <SolidColorBrush x:Key="BgBrush" Color="#f5f7fb"/>
         <SolidColorBrush x:Key="SurfaceBrush" Color="#ffffff"/>
         <SolidColorBrush x:Key="SurfaceAltBrush" Color="#eef2f7"/>
