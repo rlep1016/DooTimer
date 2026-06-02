@@ -89,10 +89,10 @@ public class BoolToVisibilityConverter : IValueConverter
 public static class AppColors
 {
     // 亮色模式
-    private const string LightBg = "#f5f7fb";
+    private const string LightBg = "#f0f2f5";
     private const string LightSurface = "#ffffff";
-    private const string LightSurfaceAlt = "#eef2f7";
-    private const string LightLine = "#d9e1ea";
+    private const string LightSurfaceAlt = "#e8ecf0";
+    private const string LightLine = "#dde1e6";
     private const string LightText = "#111827";
     private const string LightMuted = "#667085";
     private const string LightMuted2 = "#98a2b3";
@@ -117,7 +117,7 @@ public static class AppColors
     public const string Blue = "#1a73e8";
     public const string BlueHover = "#1558b0";
     public const string Green = "#0f9f6e";
-    public const string Red = "#dc2626";
+    public const string Red = "#d23b3b";
     public const string Yellow = "#b7791f";
 
     // 可动态切换的 Brush（ApplyTheme 会替换整个实例）
@@ -133,7 +133,7 @@ public static class AppColors
     public static System.Windows.Media.SolidColorBrush GreenBrush = new((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(Green));
     public static System.Windows.Media.SolidColorBrush GreenSoftBrush = new((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#e7f6ef"));
     public static System.Windows.Media.SolidColorBrush RedBrush = new((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(Red));
-    public static System.Windows.Media.SolidColorBrush RedSoftBrush = new((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#fee2e2"));
+    public static System.Windows.Media.SolidColorBrush RedSoftBrush = new((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#fbe9e9"));
     public static System.Windows.Media.SolidColorBrush YellowBrush = new((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(Yellow));
     public static System.Windows.Media.SolidColorBrush YellowSoftBrush = new((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#fff7df"));
 
@@ -180,7 +180,7 @@ public static class AppColors
         var muted = new System.Windows.Media.SolidColorBrush(C(isDark ? DarkMuted : LightMuted));
         var muted2 = new System.Windows.Media.SolidColorBrush(C(isDark ? DarkMuted2 : LightMuted2));
         var greenSoft = new System.Windows.Media.SolidColorBrush(C(isDark ? "#1a3a2e" : "#e7f6ef"));
-        var redSoft = new System.Windows.Media.SolidColorBrush(C(isDark ? "#3a1a1a" : "#fee2e2"));
+        var redSoft = new System.Windows.Media.SolidColorBrush(C(isDark ? "#3a1a1a" : "#fbe9e9"));
         var yellowSoft = new System.Windows.Media.SolidColorBrush(C(isDark ? "#3a3520" : "#fff7df"));
         var blue = new System.Windows.Media.SolidColorBrush(C(Blue));
         var blueHover = new System.Windows.Media.SolidColorBrush(C(BlueHover));
