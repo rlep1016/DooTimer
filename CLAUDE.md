@@ -335,9 +335,47 @@ Error → (重试) → Checking
 ### 注意事项
 
 - GitHub API 需要 User-Agent 头，否则返回 403
-- 版本比较：用 `AssemblyInformationalVersion`，支持 `x.y.z` 格式
+- 版本比较：用 `AssemblyInformationalVersion`，支持 `x.y.z` 格式。**注意：** .NET 编译时会把 git commit hash 拼到版本号后面（`1.2.1+d7f9b16`），`ParseVersion` 需要用 `Split('+')` 去除
 - 下载前检查本地缓存，已存在则跳过下载直接到 Downloaded 状态
 - 升级后启动时检测到 `UpToDate` 状态会自动清理 `%TEMP%\DooTimer\update\` 目录
+- 下载时通过分块读取 + `StateChanged` 事件汇报进度，关于页显示 ProgressBar + 百分比
+
+### 关于页布局
+
+`BuildUpdateSection()` 动态插入更新区域到 ScrollViewer 内的 Grid，位于产品信息之后（Row 1）。通过移动 Row ≥ 1 的元素来腾出空间。
+
+## UI 设计
+
+### 配色（亮色 / 暗色）
+
+| 角色 | 亮色 | 暗色 |
+|------|------|------|
+| Bg | #f0f2f5 | #0d1117 |
+| Surface | #ffffff | #161b22 |
+| SurfaceAlt | #e8ecf0 | #21262d |
+| Line | #dde1e6 | #30363d |
+| Text | #111827 | #e6edf3 |
+| Muted | #667085 | #8b949e |
+| Blue | #1a73e8 | — |
+| Red | #d23b3b | — |
+
+### 圆角系统
+
+- 大卡片：14px
+- 小按钮/输入框：12px
+- 状态丸：24px（保持 pill 形）
+
+### 侧边栏
+
+- Active 按钮：`BlueBrush` 底 + 白色文字
+- Hover：`BlueHoverBrush` 底 + 白色（Active）/ `SurfaceAltBrush`（普通）
+- `FocusVisualStyle="{x:Null}"` 消除焦点虚线框
+- 品牌名下方有 1px 分隔线
+
+### 按钮交互
+
+- `RoundedButton`：按下缩放 0.97x（`ScaleTransform` + `IsPressed` Trigger）
+- `SidebarButton`：取消悬停缩放（与 Active 状态冲突），仅变色
 
 ## 安装包（Inno Setup）
 
